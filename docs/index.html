@@ -17,6 +17,8 @@
   --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
   --r:10px; --rr:8px;
 }
+/* Paleta ativa: Rosa (o :root acima). Para trocar, basta por data-palette="carmim|magenta|ambar|turquesa"
+   no elemento raiz. Os conjuntos abaixo continuam prontos. */
 :root[data-palette="lovense"]{
   --ground:#FBF6F8; --surface:#FFFFFF; --raised:#F7EFF3; --sunk:#F4EAEF;
   --line:#E8D9E1; --line-soft:#F0E4EA;
@@ -82,15 +84,6 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
 .sim{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;
   color:var(--amber);border:1px solid var(--amber);background:transparent;padding:4px 8px;border-radius:99px}
 
-/* paleta */
-.palbar{display:flex;align-items:center;gap:7px;padding:9px 15px;background:var(--surface);
-  border:1px solid var(--line);border-radius:var(--r);margin-bottom:14px;flex-wrap:wrap}
-.palbar .lab{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--dim);margin-right:5px}
-.pal{display:flex;align-items:center;gap:7px;padding:6px 11px;border-radius:99px;
-  border:1px solid var(--line);background:transparent;font-size:12.5px;color:var(--muted)}
-.pal i{width:11px;height:11px;border-radius:50%;display:block;flex:none}
-.pal[aria-pressed="true"]{border-color:var(--accent);color:var(--text);background:var(--wash)}
 
 button{font-family:var(--body);font-size:14px;color:var(--text);cursor:pointer;background:var(--raised);
   border:1px solid var(--line);border-radius:var(--rr);padding:8px 12px;
@@ -288,14 +281,6 @@ input[type=range]:focus-visible{outline:2px solid var(--accent2);outline-offset:
     <button class="ghost" id="btnLock">Sair</button>
   </div>
 
-  <div class="palbar">
-    <span class="lab">Paleta</span>
-    <button class="pal" data-p="neon"    aria-pressed="true"><i style="background:#FF2D78"></i>Rosa</button>
-    <button class="pal" data-p="lovense" aria-pressed="false"><i style="background:#E8336D"></i>Carmim</button>
-    <button class="pal" data-p="petplay" aria-pressed="false"><i style="background:#FF5CC8"></i>Magenta</button>
-    <button class="pal" data-p="couro"   aria-pressed="false"><i style="background:#E8913B"></i>Âmbar</button>
-    <button class="pal" data-p="cyber"   aria-pressed="false"><i style="background:#00E5D0"></i>Turquesa</button>
-  </div>
 
   <div class="grid">
     <div class="panel" id="consolePanel" data-style="dial">
@@ -500,17 +485,6 @@ input[type=range]:focus-visible{outline:2px solid var(--accent2);outline-offset:
   var COLOR={beep:'--accent2',vibe:'--amber',shock:'--accent'};
   var NAME={beep:'Bipe',vibe:'Vibração',shock:'Choque'};
 
-  /* ---- paleta ---- */
-  Array.prototype.forEach.call(document.querySelectorAll('.pal'),function(b){
-    b.addEventListener('click',function(){
-      document.querySelectorAll('.pal').forEach(function(o){
-        o.setAttribute('aria-pressed',o===b?'true':'false')});
-      if(b.dataset.p==='neon') document.documentElement.removeAttribute('data-palette');
-      else document.documentElement.setAttribute('data-palette',b.dataset.p);
-      paint(); drawPats();
-      add('sys','Paleta <b>'+b.textContent.trim()+'</b>','você');
-    });
-  });
 
   /* ---- estilo de controle ---- */
   document.querySelectorAll('.st').forEach(function(b){
