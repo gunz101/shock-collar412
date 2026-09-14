@@ -1,0 +1,9 @@
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+config.toml
+*.log
+.DS_Store
+Thumbs.db

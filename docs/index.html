@@ -1,0 +1,805 @@
+<title>COLEIRA · CONTROLE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* ============ paletas ============ */
+:root{
+  --ground:#0B0A0F; --surface:#15131C; --raised:#1E1B28; --sunk:#100E17;
+  --line:#2C2839; --line-soft:#221F2E;
+  --text:#EDE9F5; --muted:#8E86A3; --dim:#5E5775;
+  --accent:#FF2D78; --accent-deep:#B01A52; --accent2:#3BE8E0;
+  --amber:#FFA62B; --green:#3BE87A; --red:#FF4242;
+  --glow:rgba(255,45,120,.40); --wash:rgba(255,45,120,.12);
+  --halo1:rgba(255,45,120,.10); --halo2:rgba(59,232,224,.07);
+  --display:"Chakra Petch",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:10px; --rr:8px;
+}
+:root[data-palette="lovense"]{
+  --ground:#FBF6F8; --surface:#FFFFFF; --raised:#F7EFF3; --sunk:#F4EAEF;
+  --line:#E8D9E1; --line-soft:#F0E4EA;
+  --text:#22161D; --muted:#7B6470; --dim:#A9939F;
+  --accent:#E8336D; --accent-deep:#B81F52; --accent2:#7B5CD6;
+  --amber:#E08A17; --green:#149E55; --red:#D92D2D;
+  --glow:rgba(232,51,109,.30); --wash:rgba(232,51,109,.10);
+  --halo1:rgba(232,51,109,.09); --halo2:rgba(123,92,214,.07);
+}
+:root[data-palette="petplay"]{
+  --ground:#120A16; --surface:#1C1122; --raised:#27182F; --sunk:#160D1B;
+  --line:#3A2545; --line-soft:#2A1A33;
+  --text:#F4E8F6; --muted:#AB8EB6; --dim:#6F5679;
+  --accent:#FF5CC8; --accent-deep:#B03A8A; --accent2:#A66BFF;
+  --amber:#FFB347; --green:#5CE8A0; --red:#FF5C6B;
+  --glow:rgba(255,92,200,.42); --wash:rgba(255,92,200,.13);
+  --halo1:rgba(255,92,200,.12); --halo2:rgba(166,107,255,.10);
+}
+:root[data-palette="couro"]{
+  --ground:#100C08; --surface:#1A1410; --raised:#241C15; --sunk:#15100B;
+  --line:#3A2D21; --line-soft:#282017;
+  --text:#F1E7D9; --muted:#A28F77; --dim:#6C5C48;
+  --accent:#E8913B; --accent-deep:#A35F1C; --accent2:#C2564A;
+  --amber:#D9B65B; --green:#8FB84C; --red:#E0503C;
+  --glow:rgba(232,145,59,.36); --wash:rgba(232,145,59,.12);
+  --halo1:rgba(232,145,59,.10); --halo2:rgba(194,86,74,.08);
+}
+:root[data-palette="cyber"]{
+  --ground:#060B0E; --surface:#0D161B; --raised:#142127; --sunk:#0A1216;
+  --line:#1E343D; --line-soft:#16272E;
+  --text:#E0F3F8; --muted:#7D9BA7; --dim:#4F6C78;
+  --accent:#00E5D0; --accent-deep:#00998C; --accent2:#4D8DFF;
+  --amber:#FFC145; --green:#5CE87A; --red:#FF5470;
+  --glow:rgba(0,229,208,.36); --wash:rgba(0,229,208,.11);
+  --halo1:rgba(0,229,208,.09); --halo2:rgba(77,141,255,.08);
+}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--text);font-family:var(--body);font-size:15px;
+  line-height:1.5;overflow-x:hidden;transition:background .3s,color .3s;
+  background-image:radial-gradient(1100px 520px at 78% -12%,var(--halo1),transparent 60%),
+                   radial-gradient(900px 480px at 8% 108%,var(--halo2),transparent 62%);}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+.wrap{max-width:1220px;margin:0 auto;padding:20px 18px 56px}
+
+/* ============ topo ============ */
+.topbar{display:flex;align-items:center;gap:13px;flex-wrap:wrap;padding:12px 15px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:11px;margin-right:auto}
+.tag{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:none;
+  background:linear-gradient(150deg,var(--accent),var(--accent-deep));
+  box-shadow:0 0 16px var(--glow);font-size:17px}
+.brand h1{font-size:16px;font-weight:700;letter-spacing:.07em}
+.brand small{display:block;font-family:var(--mono);font-size:10px;color:var(--dim);
+  letter-spacing:.09em;text-transform:uppercase;line-height:1.3}
+.stat{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;
+  color:var(--muted);letter-spacing:.03em;white-space:nowrap}
+.stat b{color:var(--text);font-weight:500}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);color:var(--green);
+  box-shadow:0 0 8px currentColor;flex:none}
+.dot.warn{background:var(--red);color:var(--red)}
+.sep{width:1px;height:21px;background:var(--line);flex:none}
+.sim{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--amber);border:1px solid var(--amber);background:transparent;padding:4px 8px;border-radius:99px}
+
+/* paleta */
+.palbar{display:flex;align-items:center;gap:7px;padding:9px 15px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);margin-bottom:14px;flex-wrap:wrap}
+.palbar .lab{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--dim);margin-right:5px}
+.pal{display:flex;align-items:center;gap:7px;padding:6px 11px;border-radius:99px;
+  border:1px solid var(--line);background:transparent;font-size:12.5px;color:var(--muted)}
+.pal i{width:11px;height:11px;border-radius:50%;display:block;flex:none}
+.pal[aria-pressed="true"]{border-color:var(--accent);color:var(--text);background:var(--wash)}
+
+button{font-family:var(--body);font-size:14px;color:var(--text);cursor:pointer;background:var(--raised);
+  border:1px solid var(--line);border-radius:var(--rr);padding:8px 12px;
+  transition:border-color .14s,background .14s,transform .08s}
+button:hover{border-color:var(--dim)}
+button:active{transform:translateY(1px)}
+button:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+.ghost{background:transparent}
+
+/* ============ layout ============ */
+.grid{display:grid;grid-template-columns:1.45fr 1fr;gap:14px;align-items:start}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;align-items:start}
+.row3{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;margin-top:14px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:17px}
+.phead{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.phead h2{font-size:11.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.phead .rule{flex:1;height:1px;background:var(--line-soft)}
+
+/* ============ console ============ */
+.styletabs{display:flex;gap:5px;margin-bottom:14px;background:var(--sunk);padding:4px;
+  border-radius:9px;border:1px solid var(--line-soft)}
+.st{flex:1;background:transparent;border:1px solid transparent;padding:7px;border-radius:6px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.st[aria-pressed="true"]{background:var(--raised);border-color:var(--line);color:var(--text)}
+
+.console{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.dialwrap{position:relative;width:200px;height:200px;flex:none;touch-action:none}
+.dialwrap svg{display:block;width:100%;height:100%;transform:rotate(135deg)}
+.dialwrap:focus-visible{outline:2px solid var(--accent2);outline-offset:6px;border-radius:50%}
+.readout{position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none}
+.readout .num{font-family:var(--display);font-size:64px;font-weight:700;line-height:.92;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.readout .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.19em;text-transform:uppercase;
+  color:var(--dim);margin-top:6px}
+
+/* slider vertical + xy */
+.vbar{width:200px;height:200px;display:none;align-items:flex-end;background:var(--sunk);
+  border:1px solid var(--line-soft);border-radius:12px;overflow:hidden;position:relative;
+  touch-action:none;cursor:ns-resize}
+.vbar .fill{width:100%;background:linear-gradient(0deg,var(--accent-deep),var(--accent));transition:height .06s}
+.vbar .rd{position:absolute;inset:0;display:grid;place-content:center;pointer-events:none;
+  font-family:var(--display);font-size:52px;font-weight:700;font-variant-numeric:tabular-nums;
+  mix-blend-mode:difference;color:#fff}
+.xy{width:200px;height:200px;display:none;background:var(--sunk);border:1px solid var(--line-soft);
+  border-radius:12px;position:relative;touch-action:none;cursor:crosshair;overflow:hidden}
+.xy .cross{position:absolute;width:20px;height:20px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 14px var(--glow);transform:translate(-50%,-50%);pointer-events:none}
+.xy .hint{position:absolute;left:9px;bottom:7px;font-family:var(--mono);font-size:9px;
+  color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
+[data-style="bar"] .dialwrap{display:none} [data-style="bar"] .vbar{display:flex}
+[data-style="xy"] .dialwrap{display:none}  [data-style="xy"] .xy{display:block}
+
+.ctl{display:flex;flex-direction:column;gap:15px;min-width:0}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--sunk);
+  padding:5px;border-radius:9px;border:1px solid var(--line-soft)}
+.mode{background:transparent;border:1px solid transparent;padding:9px 5px;border-radius:6px;
+  font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);display:grid;gap:2px;justify-items:center}
+.mode span{font-family:var(--mono);font-size:8.5px;letter-spacing:.07em;color:var(--dim);font-weight:400}
+.mode[aria-pressed="true"]{color:var(--text);background:var(--raised)}
+.mode[data-m="beep"][aria-pressed="true"]{border-color:var(--accent2)}
+.mode[data-m="vibe"][aria-pressed="true"]{border-color:var(--amber)}
+.mode[data-m="shock"][aria-pressed="true"]{border-color:var(--accent)}
+
+.field{display:grid;gap:7px}
+.flabel{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);
+  font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.flabel b{font-family:var(--display);font-size:15px;color:var(--text);
+  font-variant-numeric:tabular-nums;letter-spacing:0}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:99px;
+  background:var(--line);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;
+  background:var(--text);border:3px solid var(--ground);cursor:pointer;box-shadow:0 0 0 1px var(--line)}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--text);
+  border:3px solid var(--ground);cursor:pointer}
+input[type=range]:focus-visible{outline:2px solid var(--accent2);outline-offset:4px}
+
+.fire{position:relative;overflow:hidden;padding:16px;border-radius:10px;border:1px solid var(--accent);
+  background:linear-gradient(180deg,var(--wash),transparent);font-family:var(--display);font-size:15px;
+  font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.fire:hover{background:var(--wash);border-color:var(--accent)}
+.fire .prog{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--glow);pointer-events:none}
+.fire b{position:relative;font-weight:700}
+
+/* ============ limites ============ */
+.caps{display:grid;gap:8px}
+.cap{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--sunk);
+  border:1px solid var(--line-soft);border-radius:var(--rr);border-left:2px solid var(--accent2)}
+.cap .k{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin-right:auto}
+.cap .v{font-family:var(--display);font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.lockline{display:flex;gap:8px;align-items:flex-start;margin-top:12px;padding-top:12px;
+  border-top:1px solid var(--line-soft);color:var(--dim);font-size:12px;line-height:1.45}
+.panic{width:100%;margin-top:12px;padding:14px;border-radius:10px;border:1px solid var(--red);
+  background:transparent;color:var(--red);font-family:var(--display);font-size:13.5px;
+  font-weight:700;letter-spacing:.15em;text-transform:uppercase}
+.panic:hover{background:var(--red);color:var(--ground);border-color:var(--red)}
+.panic[data-locked="true"]{background:var(--red);color:var(--ground)}
+
+/* ============ padrões ============ */
+.pats{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:13px}
+.pat{display:grid;gap:6px;padding:10px;border-radius:var(--rr);background:var(--sunk);
+  border:1px solid var(--line-soft);text-align:left}
+.pat[aria-pressed="true"]{border-color:var(--accent);background:var(--wash)}
+.pat .nm{font-family:var(--display);font-size:12.5px;font-weight:600;letter-spacing:.04em}
+.pat svg{width:100%;height:26px;display:block}
+.editor{display:flex;align-items:flex-end;gap:2px;height:74px;padding:7px;background:var(--sunk);
+  border:1px solid var(--line-soft);border-radius:var(--rr);touch-action:none;cursor:crosshair}
+.editor i{flex:1;background:var(--accent);border-radius:2px 2px 0 0;min-height:2px;opacity:.85}
+.editor i.on{opacity:1;box-shadow:0 0 8px var(--glow)}
+
+/* ============ log ============ */
+.log{display:flex;flex-direction:column;gap:2px;max-height:250px;overflow-y:auto;
+  font-family:var(--mono);font-size:11px;margin:-4px;padding:4px}
+.le{display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:baseline;padding:6px 8px;
+  border-radius:6px;border-left:2px solid var(--dim);background:var(--sunk)}
+.le .t{color:var(--dim)} .le .d{color:var(--muted);min-width:0;overflow-wrap:anywhere}
+.le .d b{color:var(--text);font-weight:500}
+.le .who{color:var(--dim);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.le[data-k="shock"]{border-left-color:var(--accent)}
+.le[data-k="vibe"]{border-left-color:var(--amber)}
+.le[data-k="beep"]{border-left-color:var(--accent2)}
+.le[data-k="block"]{border-left-color:var(--red)}
+.le[data-k="block"] .d b{color:var(--red)}
+.le[data-k="sys"]{border-left-color:var(--green)}
+
+/* ============ automáticos ============ */
+.autos{display:grid;gap:8px}
+.auto{display:grid;grid-template-columns:1fr auto;gap:11px;align-items:center;padding:11px 12px;
+  background:var(--sunk);border:1px solid var(--line-soft);border-radius:var(--rr)}
+.auto h3{font-family:var(--display);font-size:13px;font-weight:600}
+.auto p{margin:2px 0 0;font-size:11.5px;color:var(--dim);line-height:1.4}
+.auto .sub{grid-column:1/-1;padding-top:9px;margin-top:2px;border-top:1px solid var(--line-soft)}
+.sw{width:41px;height:22px;border-radius:99px;background:var(--line);border:1px solid var(--line);
+  padding:0;position:relative;flex:none}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;
+  background:var(--dim);transition:transform .16s,background .16s}
+.sw[aria-pressed="true"]{background:var(--wash);border-color:var(--accent)}
+.sw[aria-pressed="true"]::after{transform:translateX(19px);background:var(--accent)}
+.vu{height:5px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:8px}
+.vu i{display:block;height:100%;width:12%;background:var(--accent2);transition:width .12s}
+
+/* ============ overlays ============ */
+.overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--ground) 92%,transparent);
+  backdrop-filter:blur(7px);display:grid;place-items:center;padding:20px;z-index:50;overflow-y:auto}
+.card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:28px;margin:auto}
+.card h2{font-size:20px;font-weight:700;margin-bottom:6px}
+.card p{color:var(--muted);font-size:13px;margin:0 0 18px}
+.inp{width:100%;padding:11px 13px;border-radius:var(--rr);border:1px solid var(--line);
+  background:var(--sunk);color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:.05em}
+.inp:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.primary{width:100%;margin-top:10px;padding:12px;border-color:var(--accent);
+  background:linear-gradient(180deg,var(--wash),transparent);font-family:var(--display);
+  font-weight:700;letter-spacing:.13em;text-transform:uppercase;font-size:12.5px}
+.err{color:var(--red);font-family:var(--mono);font-size:11px;margin-top:10px;min-height:15px}
+.hint{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:15px;line-height:1.65;
+  padding-top:13px;border-top:1px solid var(--line-soft)}
+.capedit{display:grid;grid-template-columns:1fr 92px;gap:9px;align-items:center;padding:9px 0;
+  border-bottom:1px solid var(--line-soft)}
+.capedit label{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.capedit .u{font-size:11px;color:var(--dim);display:block;text-transform:none;letter-spacing:0;margin-top:2px}
+.capedit input{padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--sunk);
+  color:var(--text);font-family:var(--mono);font-size:14px;text-align:right;width:100%}
+.capedit input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.sess{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--sunk);
+  border:1px solid var(--line-soft);border-radius:var(--rr);font-family:var(--mono);font-size:11px}
+.sess .nm{color:var(--text);margin-right:auto} .sess .ip{color:var(--dim)}
+.kick{padding:4px 9px;font-size:10.5px;font-family:var(--mono);border-color:var(--line)}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.firing{animation:pulse .5s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:900px){
+  .grid,.row2,.row3{grid-template-columns:1fr}
+  .console{grid-template-columns:1fr;justify-items:center}
+  .ctl{width:100%}
+}
+</style>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="tag">⚡</div>
+      <div><h1>COLEIRA · CONTROLE</h1><small>433,92 MHz · ASK/OOK · id 0xA37C</small></div>
+    </div>
+    <div class="sim">Simulação</div>
+    <div class="sep"></div>
+    <div class="stat"><span class="dot" id="linkDot"></span>Ponte <b id="linkTxt">online</b></div>
+    <div class="stat">Bateria <b>78%</b></div>
+    <div class="stat">Canal <b>2</b></div>
+    <div class="sep"></div>
+    <button class="ghost" id="btnAdmin">Admin</button>
+    <button class="ghost" id="btnLock">Sair</button>
+  </div>
+
+  <div class="palbar">
+    <span class="lab">Paleta</span>
+    <button class="pal" data-p="neon"    aria-pressed="true"><i style="background:#FF2D78"></i>Rosa</button>
+    <button class="pal" data-p="lovense" aria-pressed="false"><i style="background:#E8336D"></i>Carmim</button>
+    <button class="pal" data-p="petplay" aria-pressed="false"><i style="background:#FF5CC8"></i>Magenta</button>
+    <button class="pal" data-p="couro"   aria-pressed="false"><i style="background:#E8913B"></i>Âmbar</button>
+    <button class="pal" data-p="cyber"   aria-pressed="false"><i style="background:#00E5D0"></i>Turquesa</button>
+  </div>
+
+  <div class="grid">
+    <div class="panel" id="consolePanel" data-style="dial">
+      <div class="phead"><h2>Disparo manual</h2><div class="rule"></div>
+        <span class="stat" style="font-size:10px" id="frameTxt">18 quadros</span></div>
+
+      <div class="styletabs" role="group" aria-label="Estilo de controle">
+        <button class="st" data-s="dial" aria-pressed="true">Círculo</button>
+        <button class="st" data-s="bar"  aria-pressed="false">Barra</button>
+        <button class="st" data-s="xy"   aria-pressed="false">XY</button>
+      </div>
+
+      <div class="console">
+        <div>
+          <div class="dialwrap" id="dial" role="slider" tabindex="0"
+               aria-label="Intensidade" aria-valuemin="0" aria-valuemax="99" aria-valuenow="34">
+            <svg viewBox="0 0 200 200" aria-hidden="true">
+              <circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" stroke-width="13"
+                      pathLength="100" stroke-dasharray="75 25" stroke-linecap="round"
+                      style="color:var(--line-soft)"/>
+              <circle cx="100" cy="100" r="86" fill="none" stroke-width="13" pathLength="100"
+                      stroke-dasharray="50 100" stroke-linecap="round" id="capArc"
+                      style="stroke:var(--accent-deep);opacity:.55"/>
+              <circle cx="100" cy="100" r="86" fill="none" stroke-width="13" pathLength="100"
+                      stroke-dasharray="25.7 100" stroke-linecap="round" id="valArc"/>
+            </svg>
+            <div class="readout">
+              <div class="num" id="intNum">34</div>
+              <div class="lbl">Intensidade 0–99</div>
+            </div>
+          </div>
+
+          <div class="vbar" id="vbar" role="slider" tabindex="0" aria-label="Intensidade"
+               aria-valuemin="0" aria-valuemax="99" aria-valuenow="34">
+            <div class="fill" id="vfill" style="height:34%"></div>
+            <div class="rd" id="vnum">34</div>
+          </div>
+
+          <div class="xy" id="xy">
+            <div class="cross" id="cross" style="left:34%;top:60%"></div>
+            <div class="hint">← intensidade · duração ↑</div>
+          </div>
+        </div>
+
+        <div class="ctl">
+          <div class="modes" role="group" aria-label="Modo">
+            <button class="mode" data-m="beep"  aria-pressed="false">Bipe<span>tipo 3</span></button>
+            <button class="mode" data-m="vibe"  aria-pressed="false">Vibrar<span>tipo 2</span></button>
+            <button class="mode" data-m="shock" aria-pressed="true">Choque<span>tipo 1</span></button>
+          </div>
+          <div class="field">
+            <label class="flabel" for="dur">Duração <b id="durTxt">800 ms</b></label>
+            <input type="range" id="dur" min="300" max="3000" step="100" value="800">
+          </div>
+          <button class="fire" id="fire"><span class="prog" id="prog"></span><b>Disparar</b></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="phead"><h2>Limites de segurança</h2><div class="rule"></div>
+        <button class="ghost" id="btnCaps" style="padding:4px 9px;font-size:11px">Editar</button></div>
+      <div class="caps">
+        <div class="cap"><span class="k">Teto de intensidade</span><span class="v" id="cI">66</span></div>
+        <div class="cap"><span class="k">Duração máxima</span><span class="v" id="cD">2000 ms</span></div>
+        <div class="cap"><span class="k">Intervalo mínimo</span><span class="v" id="cG">4 s</span></div>
+        <div class="cap"><span class="k">Limite por minuto</span><span class="v" id="cM">8</span></div>
+      </div>
+      <div class="lockline"><span style="color:var(--accent2)">🔒</span>
+        <span>No sistema real estes valores vivem na ponte do seu PC e no firmware do ESP32.
+        A página só pede, ela nunca decide.</span></div>
+      <button class="panic" id="panic" data-locked="false">Parada de emergência</button>
+    </div>
+  </div>
+
+  <div class="row3">
+    <div class="panel">
+      <div class="phead"><h2>Padrões</h2><div class="rule"></div>
+        <span class="stat" style="font-size:10px">velocidade <b id="spdTxt">1,0×</b></span></div>
+      <div class="pats" id="pats"></div>
+      <div class="field" style="margin-bottom:13px">
+        <label class="flabel" for="spd">Velocidade <b id="spdTxt2">1,0×</b></label>
+        <input type="range" id="spd" min="25" max="400" step="25" value="100">
+      </div>
+      <div class="phead"><h2>Padrão próprio</h2><div class="rule"></div>
+        <button class="ghost" id="playMine" style="padding:4px 9px;font-size:11px">Tocar</button></div>
+      <div class="editor" id="editor" aria-label="Editor de padrão: arraste para desenhar"></div>
+    </div>
+
+    <div class="panel">
+      <div class="phead"><h2>Histórico ao vivo</h2><div class="rule"></div>
+        <span class="stat" style="font-size:10px" id="cnt">6 eventos</span></div>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="panel">
+      <div class="phead"><h2>Modos automáticos</h2><div class="rule"></div></div>
+      <div class="autos">
+        <div class="auto">
+          <div><h3>Ativação por som</h3><p>O microfone do PC dispara conforme o volume da sala.</p></div>
+          <button class="sw" data-auto="som" aria-pressed="false" aria-label="Ativar por som"></button>
+          <div class="sub">
+            <div class="flabel"><span>Sensibilidade</span><b id="sensTxt">55%</b></div>
+            <input type="range" id="sens" min="0" max="100" value="55" style="margin-top:7px">
+            <div class="vu"><i id="vu"></i></div>
+          </div>
+        </div>
+        <div class="auto">
+          <div><h3>Aleatório</h3><p>Sozinho entre 12 e 40, a cada 2 a 6 minutos.</p></div>
+          <button class="sw" data-auto="rand" aria-pressed="false" aria-label="Ativar aleatório"></button>
+        </div>
+        <div class="auto">
+          <div><h3>Alarme</h3><p>Dispara um padrão em horário marcado.</p></div>
+          <button class="sw" data-auto="alarm" aria-pressed="false" aria-label="Ativar alarme"></button>
+        </div>
+        <div class="auto">
+          <div><h3>Modo jogo</h3><p>Minecraft: dano vira choque proporcional. Chega na fase 3.</p></div>
+          <button class="sw" data-auto="game" aria-pressed="false" aria-label="Ativar modo jogo" disabled
+                  style="opacity:.4;cursor:not-allowed"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="phead"><h2>Links de controle</h2><div class="rule"></div>
+        <button class="ghost" id="newLink" style="padding:4px 9px;font-size:11px">Gerar link</button></div>
+      <p style="color:var(--dim);font-size:12.5px;margin:0 0 12px;line-height:1.5">
+        Cada convidado recebe um endereço próprio, com teto de intensidade e validade independentes.
+        Revogar um link derruba só aquela pessoa.</p>
+      <div style="display:grid;gap:8px" id="links">
+        <div class="sess"><span class="nm">rafa</span><span class="ip">máx 30 · 2 h</span>
+          <button class="kick">Revogar</button></div>
+        <div class="sess"><span class="nm">link aberto</span><span class="ip">máx 20 · 30 min</span>
+          <button class="kick">Revogar</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="gate" hidden>
+  <div class="card">
+    <div class="tag" style="margin-bottom:15px">⚡</div>
+    <h2>COLEIRA · CONTROLE</h2>
+    <p>A senha é conferida pela ponte no seu PC, nunca aqui no navegador.</p>
+    <input class="inp" id="pw" type="password" placeholder="senha de acesso" autocomplete="off">
+    <button class="primary" id="enter">Entrar</button>
+    <div class="err" id="gateErr"></div>
+    <div class="hint">Demonstração: qualquer senha entra.<br>
+      No sistema real a ponte devolve um token. Se o administrador trocar a senha,
+      todos os tokens morrem na hora e a pessoa volta para esta tela, mesmo com
+      um comando já em andamento.</div>
+  </div>
+</div>
+
+<div class="overlay" id="adm" hidden>
+  <div class="card" style="max-width:470px">
+    <h2>Painel do administrador</h2>
+    <p>Os limites abaixo valem de verdade nesta simulação. Tente disparar acima deles.</p>
+
+    <div class="capedit">
+      <label for="eI">Teto de intensidade<span class="u">0 a 99, escala da coleira</span></label>
+      <input id="eI" type="number" min="0" max="99" value="66"></div>
+    <div class="capedit">
+      <label for="eD">Duração máxima<span class="u">milissegundos</span></label>
+      <input id="eD" type="number" min="300" max="10000" step="100" value="2000"></div>
+    <div class="capedit">
+      <label for="eG">Intervalo mínimo<span class="u">segundos entre disparos</span></label>
+      <input id="eG" type="number" min="0" max="120" value="4"></div>
+    <div class="capedit" style="border-bottom:none">
+      <label for="eM">Limite por minuto<span class="u">disparos por minuto</span></label>
+      <input id="eM" type="number" min="1" max="60" value="8"></div>
+    <button class="primary" id="saveCaps">Aplicar limites</button>
+
+    <div class="phead" style="margin:24px 0 11px"><h2>Senha de acesso</h2><div class="rule"></div></div>
+    <input class="inp" id="newpw" type="text" placeholder="nova senha" autocomplete="off">
+    <button class="primary" id="savepw">Salvar e derrubar todos</button>
+
+    <div class="phead" style="margin:24px 0 11px"><h2>Sessões ativas</h2><div class="rule"></div></div>
+    <div style="display:grid;gap:7px" id="sessions">
+      <div class="sess"><span class="nm">você · admin</span><span class="ip">192.168.0.14</span></div>
+      <div class="sess"><span class="nm">convidado · rafa</span><span class="ip">201.17.88.3</span>
+        <button class="kick">Derrubar</button></div>
+      <div class="sess"><span class="nm">link temporário</span><span class="ip">177.92.4.51</span>
+        <button class="kick">Derrubar</button></div>
+    </div>
+
+    <div class="hint">A senha global de administrador fica em <b style="color:var(--muted)">config.toml</b>
+      no seu PC e sempre funciona. Editar esse arquivo também redefine a senha de acesso
+      sem precisar do site.</div>
+    <button class="ghost" id="closeAdm" style="width:100%;margin-top:14px">Fechar</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var v=34, mode='shock', dur=800, locked=false, events=6, spd=1;
+  var caps={i:66,d:2000,g:4,m:8};
+  var lastFire=0, minuteMarks=[];
+  var $=function(id){return document.getElementById(id)};
+  var COLOR={beep:'--accent2',vibe:'--amber',shock:'--accent'};
+  var NAME={beep:'Bipe',vibe:'Vibração',shock:'Choque'};
+
+  /* ---- paleta ---- */
+  Array.prototype.forEach.call(document.querySelectorAll('.pal'),function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.pal').forEach(function(o){
+        o.setAttribute('aria-pressed',o===b?'true':'false')});
+      if(b.dataset.p==='neon') document.documentElement.removeAttribute('data-palette');
+      else document.documentElement.setAttribute('data-palette',b.dataset.p);
+      paint(); drawPats();
+      add('sys','Paleta <b>'+b.textContent.trim()+'</b>','você');
+    });
+  });
+
+  /* ---- estilo de controle ---- */
+  document.querySelectorAll('.st').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.st').forEach(function(o){
+        o.setAttribute('aria-pressed',o===b?'true':'false')});
+      $('consolePanel').dataset.style=b.dataset.s;
+    });
+  });
+
+  /* ---- pintura ---- */
+  function paint(){
+    var col='var('+COLOR[mode]+')';
+    $('intNum').textContent=v; $('vnum').textContent=v;
+    $('valArc').setAttribute('stroke-dasharray',(v/99*75).toFixed(2)+' 100');
+    $('valArc').style.stroke=col;
+    $('capArc').setAttribute('stroke-dasharray',(caps.i/99*75).toFixed(2)+' 100');
+    $('vfill').style.height=(v/99*100)+'%';
+    $('cross').style.left=(v/99*100)+'%';
+    $('dial').setAttribute('aria-valuenow',v); $('vbar').setAttribute('aria-valuenow',v);
+    var over = v>caps.i;
+    $('intNum').style.color = over?'var(--red)':'var(--text)';
+    $('frameTxt').textContent=Math.round(Math.min(dur,caps.d)/45)+' quadros';
+  }
+  function setV(n){ v=Math.max(0,Math.min(99,Math.round(n))); paint(); }
+  function setD(n){ dur=Math.max(300,Math.min(3000,Math.round(n/100)*100));
+    $('dur').value=dur; $('durTxt').textContent=dur+' ms'; paint(); }
+
+  /* ---- dial ---- */
+  var dial=$('dial');
+  function fromDial(e){
+    var r=dial.getBoundingClientRect();
+    var a=Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI;
+    a=(a-135+360)%360; if(a>270) return; setV(a/270*99);
+  }
+  dial.addEventListener('pointerdown',function(e){dial.setPointerCapture(e.pointerId);fromDial(e)});
+  dial.addEventListener('pointermove',function(e){
+    if(dial.hasPointerCapture&&dial.hasPointerCapture(e.pointerId)) fromDial(e)});
+
+  /* ---- barra ---- */
+  var vbar=$('vbar');
+  function fromBar(e){ var r=vbar.getBoundingClientRect(); setV((1-(e.clientY-r.top)/r.height)*99); }
+  vbar.addEventListener('pointerdown',function(e){vbar.setPointerCapture(e.pointerId);fromBar(e)});
+  vbar.addEventListener('pointermove',function(e){
+    if(vbar.hasPointerCapture&&vbar.hasPointerCapture(e.pointerId)) fromBar(e)});
+
+  /* ---- xy ---- */
+  var xy=$('xy');
+  function fromXY(e){
+    var r=xy.getBoundingClientRect();
+    var px=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
+    var py=Math.max(0,Math.min(1,(e.clientY-r.top)/r.height));
+    setV(px*99); setD(300+(1-py)*2700); $('cross').style.top=(py*100)+'%';
+  }
+  xy.addEventListener('pointerdown',function(e){xy.setPointerCapture(e.pointerId);fromXY(e)});
+  xy.addEventListener('pointermove',function(e){
+    if(xy.hasPointerCapture&&xy.hasPointerCapture(e.pointerId)) fromXY(e)});
+
+  [dial,vbar].forEach(function(el){
+    el.addEventListener('keydown',function(e){
+      var k=e.key,h=false;
+      if(k==='ArrowUp'||k==='ArrowRight'){setV(v+1);h=true}
+      if(k==='ArrowDown'||k==='ArrowLeft'){setV(v-1);h=true}
+      if(k==='PageUp'){setV(v+10);h=true} if(k==='PageDown'){setV(v-10);h=true}
+      if(k==='Home'){setV(0);h=true} if(k==='End'){setV(99);h=true}
+      if(h) e.preventDefault();
+    });
+  });
+
+  document.querySelectorAll('.mode').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.mode').forEach(function(o){
+        o.setAttribute('aria-pressed',o===b?'true':'false')});
+      mode=b.dataset.m; paint();
+    });
+  });
+  $('dur').addEventListener('input',function(){setD(+this.value)});
+  $('sens').addEventListener('input',function(){
+    $('sensTxt').textContent=this.value+'%'; $('vu').style.width=this.value+'%'; });
+
+  /* ---- log ---- */
+  function stamp(){var d=new Date(),p=function(n){return n<10?'0'+n:''+n};
+    return p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())}
+  function add(kind,html,who,time){
+    var el=document.createElement('div'); el.className='le'; el.dataset.k=kind;
+    el.innerHTML='<span class="t">'+(time||stamp())+'</span><span class="d">'+html+
+                 '</span><span class="who">'+who+'</span>';
+    $('log').insertBefore(el,$('log').firstChild);
+    events++; $('cnt').textContent=events+' eventos';
+    while($('log').children.length>50) $('log').removeChild($('log').lastChild);
+  }
+  add('sys','Ponte conectada · <b>COM3</b> · protocolo <b>CaiXianlin</b>','sistema','20:14:02');
+  add('beep','<b>Bipe</b> · teste de alcance','você','20:15:41');
+  add('vibe','<b>Vibração 28</b> · 600 ms','você','20:16:09');
+  add('block','<b>Recusado</b> · sessão expirada, senha trocada','rafa','20:18:33');
+  add('shock','<b>Choque 31</b> · 800 ms · 18 quadros','você','20:21:50');
+  add('block','<b>Limitado a 66</b> · pedido de 84 excede o teto','rafa','20:24:12');
+  events=6; $('cnt').textContent='6 eventos';
+
+  /* ---- disparo com limites reais ---- */
+  function send(m,inten,d,who){
+    who=who||'você';
+    if(locked){ add('block','<b>Bloqueado</b> · parada de emergência ativa',who); return false; }
+    var now=Date.now();
+    minuteMarks=minuteMarks.filter(function(t){return now-t<60000});
+    if(minuteMarks.length>=caps.m){
+      add('block','<b>Recusado</b> · limite de '+caps.m+' por minuto atingido',who); return false; }
+    var gap=(now-lastFire)/1000;
+    if(lastFire && gap<caps.g){
+      add('block','<b>Recusado</b> · faltam '+(caps.g-gap).toFixed(1)+' s do intervalo mínimo',who);
+      return false; }
+    var i=Math.min(inten,caps.i), dd=Math.min(d,caps.d), notes=[];
+    if(inten>caps.i) notes.push('limitado de '+inten+' para '+caps.i);
+    if(d>caps.d) notes.push('duração cortada para '+caps.d+' ms');
+    lastFire=now; minuteMarks.push(now);
+    var txt='<b>'+NAME[m]+(m==='beep'?'':' '+i)+'</b> · '+dd+' ms · '+Math.round(dd/45)+' quadros';
+    if(notes.length) txt+=' · <b>'+notes.join(', ')+'</b>';
+    add(notes.length?'block':m,txt,who);
+    runProgress(dd); return true;
+  }
+  function runProgress(d){
+    $('fire').classList.add('firing'); var t0=Date.now();
+    var iv=setInterval(function(){
+      var p=Math.min(1,(Date.now()-t0)/d); $('prog').style.width=(p*100)+'%';
+      if(p>=1){clearInterval(iv);$('prog').style.width='0';$('fire').classList.remove('firing')}
+    },16);
+  }
+  $('fire').addEventListener('click',function(){ send(mode,v,dur); });
+
+  /* ---- padrões ---- */
+  var PATTERNS=[
+    {id:'terremoto',nm:'Terremoto',steps:[[90,180],[20,120],[85,180],[15,140],[95,220],[10,200]]},
+    {id:'fogos',    nm:'Fogos',    steps:[[99,90],[0,140],[99,90],[0,140],[70,300],[0,220]]},
+    {id:'onda',     nm:'Onda',     steps:[[10,220],[35,220],[65,220],[90,260],[65,220],[35,220],[10,220]]},
+    {id:'pulso',    nm:'Pulso',    steps:[[60,240],[0,240],[60,240],[0,240],[60,240],[0,240]]}
+  ];
+  function spark(steps){
+    var w=100,total=steps.reduce(function(a,s){return a+s[1]},0),x=0,d='M0 26';
+    steps.forEach(function(s){
+      var y=26-(s[0]/99*24), sw=s[1]/total*w;
+      d+=' L'+x.toFixed(1)+' '+y.toFixed(1)+' L'+(x+sw).toFixed(1)+' '+y.toFixed(1); x+=sw;
+    });
+    d+=' L100 26 Z';
+    return '<svg viewBox="0 0 100 26" preserveAspectRatio="none" aria-hidden="true">'+
+      '<path d="'+d+'" fill="var(--wash)" stroke="var(--accent)" stroke-width="1.2"/></svg>';
+  }
+  function drawPats(){
+    $('pats').innerHTML='';
+    PATTERNS.forEach(function(p){
+      var b=document.createElement('button');
+      b.className='pat'; b.setAttribute('aria-pressed','false'); b.dataset.id=p.id;
+      b.innerHTML='<span class="nm">'+p.nm+'</span>'+spark(p.steps);
+      b.addEventListener('click',function(){ playPattern(p.steps,p.nm,b) });
+      $('pats').appendChild(b);
+    });
+  }
+  var running=null;
+  function playPattern(steps,nm,btn){
+    if(running){ clearTimeout(running.t); running.btn&&running.btn.setAttribute('aria-pressed','false');
+      running=null; add('sys','<b>'+nm+'</b> interrompido','você'); return; }
+    btn&&btn.setAttribute('aria-pressed','true');
+    add('sys','Padrão <b>'+nm+'</b> iniciado · '+spd.toFixed(2).replace('.',',')+'×','você');
+    var k=0; running={btn:btn,t:null};
+    (function step(){
+      if(k>=steps.length){ btn&&btn.setAttribute('aria-pressed','false'); running=null;
+        add('sys','Padrão <b>'+nm+'</b> concluído','você'); return; }
+      var s=steps[k++], d=Math.max(300,Math.round(s[1]/spd));
+      setV(s[0]);
+      if(s[0]>0) send(mode,s[0],d);
+      running.t=setTimeout(step,d+120);
+    })();
+  }
+  drawPats();
+  $('spd').addEventListener('input',function(){
+    spd=+this.value/100;
+    var t=spd.toFixed(2).replace('.',',')+'×';
+    $('spdTxt').textContent=t; $('spdTxt2').textContent=t; });
+
+  /* ---- editor ---- */
+  var mine=[20,35,50,70,85,70,50,30,45,60,80,95,60,40,25,15];
+  var ed=$('editor'), drag=false;
+  function drawEd(){
+    ed.innerHTML='';
+    mine.forEach(function(h,i){
+      var b=document.createElement('i'); b.style.height=Math.max(2,h)+'%'; b.dataset.i=i;
+      ed.appendChild(b);
+    });
+  }
+  function editAt(e){
+    var r=ed.getBoundingClientRect();
+    var i=Math.floor((e.clientX-r.left)/r.width*mine.length);
+    if(i<0||i>=mine.length) return;
+    mine[i]=Math.max(0,Math.min(99,Math.round((1-(e.clientY-r.top)/r.height)*99)));
+    drawEd();
+  }
+  ed.addEventListener('pointerdown',function(e){drag=true;ed.setPointerCapture(e.pointerId);editAt(e)});
+  ed.addEventListener('pointermove',function(e){if(drag)editAt(e)});
+  ed.addEventListener('pointerup',function(){drag=false});
+  drawEd();
+  $('playMine').addEventListener('click',function(){
+    playPattern(mine.map(function(h){return [h,300]}),'Padrão próprio',null);
+  });
+
+  /* ---- limites editáveis ---- */
+  function showCaps(){
+    $('cI').textContent=caps.i; $('cD').textContent=caps.d+' ms';
+    $('cG').textContent=caps.g+' s'; $('cM').textContent=caps.m;
+    $('eI').value=caps.i; $('eD').value=caps.d; $('eG').value=caps.g; $('eM').value=caps.m;
+    paint();
+  }
+  $('saveCaps').addEventListener('click',function(){
+    var old=JSON.stringify(caps);
+    caps.i=Math.max(0,Math.min(99,+$('eI').value||0));
+    caps.d=Math.max(300,Math.min(10000,+$('eD').value||300));
+    caps.g=Math.max(0,Math.min(120,+$('eG').value||0));
+    caps.m=Math.max(1,Math.min(60,+$('eM').value||1));
+    showCaps();
+    if(old!==JSON.stringify(caps))
+      add('sys','<b>Limites aplicados</b> · teto '+caps.i+' · '+caps.d+' ms · '+
+          caps.g+' s · '+caps.m+'/min','admin');
+  });
+
+  /* ---- pânico ---- */
+  $('panic').addEventListener('click',function(){
+    locked=!locked; this.dataset.locked=locked?'true':'false';
+    this.textContent=locked?'Travado · toque para liberar':'Parada de emergência';
+    $('linkDot').className=locked?'dot warn':'dot';
+    $('linkTxt').textContent=locked?'travada':'online';
+    if(running){clearTimeout(running.t);running.btn&&running.btn.setAttribute('aria-pressed','false');running=null}
+    add(locked?'block':'sys',locked
+      ? '<b>PARADA DE EMERGÊNCIA</b> · transmissão cortada, novos pedidos recusados'
+      : '<b>Liberado</b> · a ponte voltou a aceitar comandos','você');
+  });
+
+  /* ---- automáticos ---- */
+  var vuTimer=null;
+  document.querySelectorAll('.sw').forEach(function(b){
+    b.addEventListener('click',function(){
+      if(b.disabled) return;
+      var on=b.getAttribute('aria-pressed')!=='true';
+      b.setAttribute('aria-pressed',on?'true':'false');
+      var n={som:'Ativação por som',rand:'Aleatório',alarm:'Alarme',game:'Modo jogo'}[b.dataset.auto];
+      add('sys','<b>'+n+'</b> '+(on?'ativado':'desativado'),'você');
+      if(b.dataset.auto==='som'){
+        if(on){ vuTimer=setInterval(function(){
+            $('vu').style.width=(8+Math.abs(Math.sin(Date.now()/430))*72).toFixed(0)+'%'; },110); }
+        else { clearInterval(vuTimer); $('vu').style.width=$('sens').value+'%'; }
+      }
+    });
+  });
+
+  /* ---- gate / admin ---- */
+  var gate=$('gate'), adm=$('adm');
+  $('btnLock').addEventListener('click',function(){gate.hidden=false;$('pw').focus()});
+  function enter(){
+    if(!$('pw').value){$('gateErr').textContent='Digite a senha.';return}
+    $('gateErr').textContent=''; $('pw').value=''; gate.hidden=true;
+    add('sys','Sessão aberta · token emitido pela ponte','você');
+  }
+  $('enter').addEventListener('click',enter);
+  $('pw').addEventListener('keydown',function(e){if(e.key==='Enter')enter()});
+  $('btnAdmin').addEventListener('click',function(){adm.hidden=false});
+  $('btnCaps').addEventListener('click',function(){adm.hidden=false;$('eI').focus()});
+  $('closeAdm').addEventListener('click',function(){adm.hidden=true});
+  $('savepw').addEventListener('click',function(){
+    if(!$('newpw').value) return;
+    $('newpw').value='';
+    var s=$('sessions'); while(s.children.length>1) s.removeChild(s.lastChild);
+    adm.hidden=true;
+    add('sys','<b>Senha trocada</b> · 2 sessões derrubadas, tokens invalidados','admin');
+  });
+  $('newLink').addEventListener('click',function(){
+    var n=['convidado','visitante','anônimo'][Math.min(2,$('links').children.length)];
+    var el=document.createElement('div'); el.className='sess';
+    el.innerHTML='<span class="nm">'+n+'</span><span class="ip">máx '+caps.i+
+      ' · 1 h</span><button class="kick">Revogar</button>';
+    $('links').appendChild(el);
+    add('sys','<b>Link gerado</b> · '+n+' · teto '+caps.i+' · validade 1 h','admin');
+  });
+  document.addEventListener('click',function(e){
+    if(e.target.classList&&e.target.classList.contains('kick')){
+      var row=e.target.closest('.sess'), nm=row.querySelector('.nm').textContent;
+      row.remove(); add('sys','<b>Revogado</b> · '+nm,'admin');
+    }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){adm.hidden=true;gate.hidden=true}
+  });
+
+  showCaps();
+})();
+</script>
