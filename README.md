@@ -1,4 +1,4 @@
-# COLEIRA · CONTROLE
+# Collar Console
 
 Controle de uma coleira de adestramento de 433 MHz a partir do PC, sem nuvem de terceiros
 e sem alteração física no computador. O objetivo final tem três gatilhos:
@@ -53,7 +53,6 @@ docs/        página publicada no GitHub Pages (a simulação)
 hardware/    lista de compras, ligações, referência de protocolo
 firmware/    código do ESP32 (a fazer)
 ponte/       serviço Python: serial, autenticação, limites, servidor local (a fazer)
-DEVLOG.md    registro de decisões, em ordem cronológica
 ```
 
 ---
