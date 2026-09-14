@@ -255,6 +255,9 @@ input[type=range]:focus-visible{outline:2px solid var(--accent2);outline-offset:
 .capedit input{padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--sunk);
   color:var(--text);font-family:var(--mono);font-size:14px;text-align:right;width:100%}
 .capedit input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.quick button{font-family:var(--mono);font-size:11.5px;padding:10px 8px;letter-spacing:.02em}
+.quick button:hover{border-color:var(--accent);color:var(--accent)}
 .sess{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--sunk);
   border:1px solid var(--line-soft);border-radius:var(--rr);font-family:var(--mono);font-size:11px}
 .sess .nm{color:var(--text);margin-right:auto} .sess .ip{color:var(--dim)}
@@ -429,7 +432,7 @@ input[type=range]:focus-visible{outline:2px solid var(--accent2);outline-offset:
   </div>
 </div>
 
-<div class="overlay" id="gate" hidden>
+<div class="overlay" id="gate">
   <div class="card">
     <div class="tag" style="margin-bottom:15px">⚡</div>
     <h2>COLLAR CONSOLE</h2>
@@ -438,6 +441,10 @@ input[type=range]:focus-visible{outline:2px solid var(--accent2);outline-offset:
     <input class="inp" id="pw" type="password" placeholder="senha de acesso" autocomplete="off">
     <button class="primary" id="enter">Entrar</button>
     <div class="err" id="gateErr"></div>
+    <div class="quick">
+      <button class="ghost" id="qGuest">Entrar como convidado</button>
+      <button class="ghost" id="qAdmin">Entrar como administrador</button>
+    </div>
     <div class="hint">Demonstração: digite <b style="color:var(--accent)">admin</b> para entrar
       como administrador. Qualquer outra senha entra como convidado.<br><br>
       No sistema real a ponte devolve um token que carrega o nível. Ela recusa um pedido
@@ -754,16 +761,23 @@ input[type=range]:focus-visible{outline:2px solid var(--accent2);outline-offset:
     if(r!=='admin') adm.hidden=true;
   }
 
-  $('btnLock').addEventListener('click',function(){gate.hidden=false;$('pw').focus()});
-  function enter(){
-    var pv=$('pw').value;
-    if(!pv){$('gateErr').textContent='Digite a senha.';return}
-    var r = pv.toLowerCase()==='admin' ? 'admin' : 'user';
+  $('btnLock').addEventListener('click',function(){
+    applyRole('user'); gate.hidden=false; $('pw').focus();
+    add('sys','Sessão encerrada · token descartado','você');
+  });
+  function doEnter(r){
     $('gateErr').textContent=''; $('pw').value=''; gate.hidden=true;
     applyRole(r);
     add('sys','Sessão aberta como <b>'+(r==='admin'?'administrador':'convidado')+
         '</b> · token emitido pela ponte','você');
   }
+  function enter(){
+    var pv=$('pw').value;
+    if(!pv){$('gateErr').textContent='Digite a senha.';return}
+    doEnter(pv.toLowerCase()==='admin' ? 'admin' : 'user');
+  }
+  $('qGuest').addEventListener('click',function(){doEnter('user')});
+  $('qAdmin').addEventListener('click',function(){doEnter('admin')});
   $('enter').addEventListener('click',enter);
   $('pw').addEventListener('keydown',function(e){if(e.key==='Enter')enter()});
   $('btnAdmin').addEventListener('click',function(){ if(role==='admin') adm.hidden=false });
@@ -791,10 +805,10 @@ input[type=range]:focus-visible{outline:2px solid var(--accent2);outline-offset:
     }
   });
   document.addEventListener('keydown',function(e){
-    if(e.key==='Escape'){adm.hidden=true;gate.hidden=true}
+    if(e.key==='Escape') adm.hidden=true;
   });
 
-  applyRole('admin');
+  applyRole('user');
   showCaps();
 })();
 </script>
